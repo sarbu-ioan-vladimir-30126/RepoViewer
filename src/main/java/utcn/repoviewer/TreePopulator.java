@@ -23,7 +23,7 @@ public class TreePopulator {
     }
     
     public void populate(File fileRoot){
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode(new FileNode(fileRoot));
+        FileNode rootNode = new FileNode(fileRoot); // root is not visible anyway
         createChildren(fileRoot, rootNode);
         treeModel.setRoot(rootNode);
     }
@@ -41,7 +41,7 @@ public class TreePopulator {
         return false;
     }
     
-    private void createChildren(File fileRoot, DefaultMutableTreeNode node) {
+    private void createChildren(File fileRoot, FileNode node) {
         File[] files = fileRoot.listFiles();
         if (files == null) return;
         // TODO: if there is only one subfolder, modify this node name, do not add many child nodes
@@ -49,8 +49,7 @@ public class TreePopulator {
         
         for (File file : files) {
             if (isFileVisible(file)){
-                DefaultMutableTreeNode childNode =
-                        new DefaultMutableTreeNode(new FileNode(file));
+                FileNode childNode = new FileNode(file);
                 node.add(childNode);
                 if (file.isDirectory()) {
                     createChildren(file, childNode);

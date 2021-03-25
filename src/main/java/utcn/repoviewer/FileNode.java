@@ -6,15 +6,18 @@
 package utcn.repoviewer;
 
 import java.io.File;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
  * @author ocuibus
  */
- public class FileNode {
+ public class FileNode extends DefaultMutableTreeNode {
         private File file;
+        protected boolean isViewableFile; // true if this is a file, false if it is a folder
         public FileNode(File file) {
             this.file = file;
+            this.isViewableFile = file.isFile();
         }
         
         @Override

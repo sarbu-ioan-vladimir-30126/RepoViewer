@@ -17,6 +17,8 @@ import javax.swing.JFileChooser;
 import javax.swing.ListModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 
 /**
@@ -62,7 +64,13 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        textFieldRootFolder.setEditable(false);
         textFieldRootFolder.setText("select folder");
+        textFieldRootFolder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                textFieldRootFolderMouseClicked(evt);
+            }
+        });
 
         labelCurrentFolder.setText("current folder");
 
@@ -90,7 +98,7 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(textFieldRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addContainerGap(328, Short.MAX_VALUE))
         );
         panelChooseFolderLayout.setVerticalGroup(
             panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,14 +120,18 @@ public class Main extends javax.swing.JFrame {
 
         tabbedPaneOptions.addTab("choose folder", panelChooseFolder);
 
+        panelView.setLayout(new java.awt.BorderLayout());
+
         treeFolders.setModel(treeModelFoldersStructure);
         treeFolders.setRootVisible(false);
-        treeFolders.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                treeFoldersMouseClicked(evt);
+        treeFolders.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                treeFoldersValueChanged(evt);
             }
         });
         scrollPaneFolderSelect.setViewportView(treeFolders);
+
+        panelView.add(scrollPaneFolderSelect, java.awt.BorderLayout.WEST);
 
         panelViewCode.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -127,27 +139,14 @@ public class Main extends javax.swing.JFrame {
         panelViewCode.setLayout(panelViewCodeLayout);
         panelViewCodeLayout.setHorizontalGroup(
             panelViewCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 573, Short.MAX_VALUE)
+            .addGap(0, 658, Short.MAX_VALUE)
         );
         panelViewCodeLayout.setVerticalGroup(
             panelViewCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout panelViewLayout = new javax.swing.GroupLayout(panelView);
-        panelView.setLayout(panelViewLayout);
-        panelViewLayout.setHorizontalGroup(
-            panelViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelViewLayout.createSequentialGroup()
-                .addComponent(scrollPaneFolderSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(panelViewCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        panelViewLayout.setVerticalGroup(
-            panelViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollPaneFolderSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 376, Short.MAX_VALUE)
-            .addComponent(panelViewCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        panelView.add(panelViewCode, java.awt.BorderLayout.CENTER);
 
         tabbedPaneOptions.addTab("view", panelView);
 
@@ -185,26 +184,36 @@ public class Main extends javax.swing.JFrame {
         if (studentsToView.size() > 0){
             String defaultStudentForFolderStructure = studentsToView.get(0);
             String absolutePathToStudentFolder = getAbsolutePathToStudent(defaultStudentForFolderStructure);
-            System.out.println(absolutePathToStudentFolder);
+            //System.out.println("this folder was selected" + absolutePathToStudentFolder);
             // TODO: change here to get an "average" of folders structure
             File rootDirectory = new File(absolutePathToStudentFolder);
             treePopulator.populate(rootDirectory);
+            treeFolders.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         }
     }//GEN-LAST:event_tabbedPaneOptionsMouseClicked
 
-    private void treeFoldersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treeFoldersMouseClicked
-        System.out.println(treeFolders.getSelectionPath());
+    private void treeFoldersValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeFoldersValueChanged
+        //System.out.println("this path was selected: " + treeFolders.getSelectionPath());
+        panelViewCode.removeAll();
         if (treeFolders.getSelectionPath() != null){
             String firstSelectedPath = treeFolders.getSelectionPath().toString();
-            panelViewCode.removeAll();
             panelViewCode.setLayout(new GridLayout(1, studentsToView.size()));
-            // add all fileviews to the panel
-            for (String student: studentsToView){
-                FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, firstSelectedPath));
-                this.panelViewCode.add(studentFileView); 
+            // add all fileviews to the panel, but only if selection is a file!
+            if (((FileNode)treeFolders.getLastSelectedPathComponent()).isViewableFile){
+                for (String student: studentsToView){
+                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, firstSelectedPath.toString()));
+                    panelViewCode.add(studentFileView);
+                }
             }
         }
-    }//GEN-LAST:event_treeFoldersMouseClicked
+        panelViewCode.revalidate();
+        panelViewCode.repaint();
+
+    }//GEN-LAST:event_treeFoldersValueChanged
+
+    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
+        buttonChooseRootFolderActionPerformed(null);
+    }//GEN-LAST:event_textFieldRootFolderMouseClicked
     
     private String getAbsolutePathToStudent(String studentName){
         return textFieldRootFolder.getText() + "\\" + studentName;
