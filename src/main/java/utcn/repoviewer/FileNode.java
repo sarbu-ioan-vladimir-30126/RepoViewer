@@ -27,6 +27,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
                 return file.getAbsolutePath();
             } else {
                 return name;
+                
             }
         }
     }
