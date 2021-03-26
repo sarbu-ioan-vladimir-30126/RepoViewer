@@ -3,3 +3,10 @@ This project is a java swing desktop application that facilitates viewing severa
 This project is in progress.
 
 Added new Team Member: Szasz Roberth Paul
+
+Added new Team Member: Nicorici Iulia
+
+Added new Team Member: Ceoca Ovidiu
+
+Added new Team Member: Octavian Cuibus
+
