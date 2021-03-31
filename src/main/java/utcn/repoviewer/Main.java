@@ -5,16 +5,14 @@
 */
 package utcn.repoviewer;
 
-import java.awt.GridLayout;
+import java.awt.*;
 import java.io.File;
 import java.time.Clock;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.AbstractListModel;
-import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.ListModel;
+import javax.swing.*;
+import javax.swing.plaf.SplitPaneUI;
+import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
@@ -54,7 +52,6 @@ public class Main extends javax.swing.JFrame {
         scrollPaneFolderSelect = new javax.swing.JScrollPane();
         treeFolders = new javax.swing.JTree();
         panelViewCode = new javax.swing.JPanel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Repo Viewer");
 
@@ -91,14 +88,16 @@ public class Main extends javax.swing.JFrame {
             .addGroup(panelChooseFolderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelChooseFolderLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(185, 185, 185))
                     .addGroup(panelChooseFolderLayout.createSequentialGroup()
                         .addComponent(labelCurrentFolder)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(textFieldRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(328, Short.MAX_VALUE))
+                .addGap(332, 332, 332))
         );
         panelChooseFolderLayout.setVerticalGroup(
             panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,6 +123,16 @@ public class Main extends javax.swing.JFrame {
 
         treeFolders.setModel(treeModelFoldersStructure);
         treeFolders.setRootVisible(false);
+        treeFolders.setScrollsOnExpand(true);
+
+        treeFolders.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
+            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
+                treeFoldersTreeCollapsed(evt);
+            }
+            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt) {
+                treeFoldersTreeExpanded(evt);
+            }
+        });
         treeFolders.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 treeFoldersValueChanged(evt);
@@ -187,7 +196,7 @@ public class Main extends javax.swing.JFrame {
             //System.out.println("this folder was selected" + absolutePathToStudentFolder);
             // TODO: change here to get an "average" of folders structure
             File rootDirectory = new File(absolutePathToStudentFolder);
-            treePopulator.populate(rootDirectory);
+            treePopulator.populate(rootDirectory); //Here is problem, too many calls -> tree resets after some events
             treeFolders.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         }
     }//GEN-LAST:event_tabbedPaneOptionsMouseClicked
@@ -214,6 +223,14 @@ public class Main extends javax.swing.JFrame {
     private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
         buttonChooseRootFolderActionPerformed(null);
     }//GEN-LAST:event_textFieldRootFolderMouseClicked
+
+    private void treeFoldersTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
+        panelView.revalidate();
+    }
+
+    private void treeFoldersTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {
+        panelView.revalidate();
+    }
     
     private String getAbsolutePathToStudent(String studentName){
         return textFieldRootFolder.getText() + "\\" + studentName;
