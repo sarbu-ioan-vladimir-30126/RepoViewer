@@ -5,10 +5,12 @@
  */
 package utcn.repoviewer;
 
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -21,12 +23,14 @@ public class FileView extends JPanel{
     String pathToFileAbsolute;
     JTextArea textAreaCode;
     public FileView(String studentName, String pathToFileAbsolute){
-        this.setLayout(new GridLayout(2, 1));
+        this.setLayout(new BoxLayout (this, BoxLayout.Y_AXIS));
         JLabel labelStudentName = new JLabel(studentName);
+        labelStudentName.setAlignmentX( Component.CENTER_ALIGNMENT );
         this.add(labelStudentName);
         
         this.pathToFileAbsolute = pathToFileAbsolute;
         this.textAreaCode = new JTextArea(getFileContents(pathToFileAbsolute));
+        textAreaCode.setAlignmentX( Component.CENTER_ALIGNMENT );
         this.add(textAreaCode);
     }
     
