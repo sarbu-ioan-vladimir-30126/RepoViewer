@@ -260,9 +260,6 @@ public class Main extends javax.swing.JFrame {
                 newModel.addElement(studentsList.getElementAt(i));
             }
         }
-        if(newModel.isEmpty()){
-            newModel.addElement("No results found...");
-        }
         jListStudents.setModel(newModel);
     }//GEN-LAST:event_textFieldSearchFilterKeyReleased
 
