@@ -85,3 +85,5 @@ fabric.properties
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/student_repos/isp-labs-main-student0-30126/isp-lab-4-master/nbproject/
+/student_repos/isp-labs-main-student0-30126/isp-lab-5-master/nbproject/

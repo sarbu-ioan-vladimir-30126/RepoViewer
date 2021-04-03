@@ -8,8 +8,11 @@ package utcn.repoviewer;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,14 +32,53 @@ public class FileView extends JPanel{
         this.add(labelStudentName);
         
         this.pathToFileAbsolute = pathToFileAbsolute;
-        this.textAreaCode = new JTextArea(getFileContents(pathToFileAbsolute));
+        String fileContent = getFileContents(pathToFileAbsolute);
+        this.textAreaCode = new JTextArea(fileContent);
         textAreaCode.setAlignmentX( Component.CENTER_ALIGNMENT );
+        if (fileContent.isEmpty()){
+            textAreaCode.setEnabled(false);
+        }
         this.add(textAreaCode);
     }
     
+    public String modifyPath(String absolutePath){
+        
+        //The part to be corrected starts at \[ ...
+        int indexOfFirstElelement = absolutePath.indexOf('[');
+        String partOfPathToModify = absolutePath.substring(indexOfFirstElelement);
+        absolutePath = absolutePath.replace(partOfPathToModify, "");
+        
+        //Delete not needed part of the path.
+        int indexToDelete = partOfPathToModify.indexOf(", ");
+        partOfPathToModify = partOfPathToModify.substring(indexToDelete + "' ".length());
+        
+        //Correct path so File and Scanner classes can reach the specific file.
+        partOfPathToModify = partOfPathToModify.replace(", ", "\\");
+        partOfPathToModify = partOfPathToModify.replace(" / ", "\\");
+        partOfPathToModify = partOfPathToModify.replace("]", "");
+        
+        //Add correct path to absolutePath
+        absolutePath += partOfPathToModify;
+
+        return absolutePath;
+    }
     public String getFileContents(String absolutePath){
-        // TODO: implement this
-        return "this is an example \n of a file content \n by a certain student \n ......";
+
+        String fileContent = "";
+        absolutePath = modifyPath(absolutePath);
+                   
+        try {
+            File fileToRead = new File(absolutePath);
+            Scanner fileScanner;
+            fileScanner = new Scanner(fileToRead);
+            while(fileScanner.hasNextLine()){
+                fileContent += fileScanner.nextLine() + "\n";
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FileView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return fileContent;
     }
     // student name
     // code area
