@@ -38,8 +38,7 @@ public class FileView extends JPanel{
         customizeFileView();
         RTextScrollPane sp = new RTextScrollPane(textAreaCode);  //for scroll
         this.add(sp);
-    }
-    
+}
     public void customizeFileView(){
         if(fileExtension.equals("java]")){  //check if the file is .java
             textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA); //set style java
@@ -52,6 +51,7 @@ public class FileView extends JPanel{
         textAreaCode.setCodeFoldingEnabled(true);
         textAreaCode.setMarkOccurrences(true);
         textAreaCode.setAutoIndentEnabled(true);
+        textAreaCode.setEditable(false);
         textAreaCode.setFont(new Font("Consolas", Font.PLAIN, 13)); //set font style: Consolas, plain, size 13
     }
     
