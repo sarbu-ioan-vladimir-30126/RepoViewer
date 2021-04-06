@@ -41,32 +41,8 @@ public class FileView extends JPanel{
         this.add(textAreaCode);
     }
     
-    public String modifyPath(String absolutePath){
-        
-        //The part to be corrected starts at \[ ...
-        int indexOfFirstElelement = absolutePath.indexOf('[');
-        String partOfPathToModify = absolutePath.substring(indexOfFirstElelement);
-        absolutePath = absolutePath.replace(partOfPathToModify, "");
-        
-        //Delete not needed part of the path.
-        int indexToDelete = partOfPathToModify.indexOf(", ");
-        partOfPathToModify = partOfPathToModify.substring(indexToDelete + "' ".length());
-        
-        //Correct path so File and Scanner classes can reach the specific file.
-        partOfPathToModify = partOfPathToModify.replace(", ", "\\");
-        partOfPathToModify = partOfPathToModify.replace(" / ", "\\");
-        partOfPathToModify = partOfPathToModify.replace("]", "");
-        
-        //Add correct path to absolutePath
-        absolutePath += partOfPathToModify;
-
-        return absolutePath;
-    }
     public String getFileContents(String absolutePath){
-
         String fileContent = "";
-        absolutePath = modifyPath(absolutePath);
-                   
         try {
             File fileToRead = new File(absolutePath);
             Scanner fileScanner;
@@ -74,10 +50,10 @@ public class FileView extends JPanel{
             while(fileScanner.hasNextLine()){
                 fileContent += fileScanner.nextLine() + "\n";
             }
+            fileScanner.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FileView.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return fileContent;
     }
     // student name
