@@ -46,7 +46,6 @@ public class FileView extends JPanel{
         }
         customizeFileView();
         this.add(sp);
-        this.add(textAreaCode);
 }
     public void customizeFileView(){
         if(fileExtension.equals("java]")){  //check if the file is .java
