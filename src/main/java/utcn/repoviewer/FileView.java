@@ -6,6 +6,7 @@
 package utcn.repoviewer;
 
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +17,9 @@ import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import org.fife.ui.rsyntaxtextarea.*;
+import org.fife.ui.rtextarea.RTextScrollPane;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -24,21 +27,41 @@ import javax.swing.JTextArea;
  */
 public class FileView extends JPanel{
     String pathToFileAbsolute;
-    JTextArea textAreaCode;
+    RSyntaxTextArea textAreaCode;
+    String fileExtension;
+    
     public FileView(String studentName, String pathToFileAbsolute){
         this.setLayout(new BoxLayout (this, BoxLayout.Y_AXIS));
         JLabel labelStudentName = new JLabel(studentName);
         labelStudentName.setAlignmentX( Component.CENTER_ALIGNMENT );
         this.add(labelStudentName);
-        
+        this.fileExtension = FilenameUtils.getExtension(pathToFileAbsolute);
         this.pathToFileAbsolute = pathToFileAbsolute;
         String fileContent = getFileContents(pathToFileAbsolute);
-        this.textAreaCode = new JTextArea(fileContent);
+        this.textAreaCode = new RSyntaxTextArea(fileContent);
+        RTextScrollPane sp = new RTextScrollPane(textAreaCode);  //for scroll
         textAreaCode.setAlignmentX( Component.CENTER_ALIGNMENT );
         if (fileContent.isEmpty()){
             textAreaCode.setEnabled(false);
         }
+        customizeFileView();
+        this.add(sp);
         this.add(textAreaCode);
+}
+    public void customizeFileView(){
+        if(fileExtension.equals("java]")){  //check if the file is .java
+            textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA); //set style java
+        }
+        else if(fileExtension.equals("xml]")){ //if is .xml
+            textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);  //set style xml
+        }
+        textAreaCode.setAnimateBracketMatching(true); 
+        textAreaCode.setAntiAliasingEnabled(true);
+        textAreaCode.setCodeFoldingEnabled(true);
+        textAreaCode.setMarkOccurrences(true);
+        textAreaCode.setAutoIndentEnabled(true);
+        textAreaCode.setEditable(false);
+        textAreaCode.setFont(new Font("Consolas", Font.PLAIN, 13)); //set font style: Consolas, plain, size 13
     }
     
     public String getFileContents(String absolutePath){
