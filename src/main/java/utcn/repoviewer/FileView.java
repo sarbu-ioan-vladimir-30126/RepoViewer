@@ -48,10 +48,10 @@ public class FileView extends JPanel{
         this.add(sp);
 }
     public void customizeFileView(){
-        if(fileExtension.equals("java]")){  //check if the file is .java
+        if(fileExtension.equals("java")){  //check if the file is .java
             textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA); //set style java
         }
-        else if(fileExtension.equals("xml]")){ //if is .xml
+        else if(fileExtension.equals("xml")){ //if is .xml
             textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_XML);  //set style xml
         }
         textAreaCode.setAnimateBracketMatching(true); 
