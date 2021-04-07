@@ -253,7 +253,7 @@ public class Main extends javax.swing.JFrame {
 
     private void textFieldSearchFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyReleased
         jListStudents.setModel(studentsList);
-
+        
         DefaultListModel<String> newModel = new DefaultListModel<>();
         for (int i = 0; i < jListStudents.getModel().getSize(); i++) {
             if (studentsList.get(i).toLowerCase().contains(textFieldSearchFilter.getText().toLowerCase())) {
@@ -278,7 +278,7 @@ public class Main extends javax.swing.JFrame {
         panelView.revalidate();
 
     }//GEN-LAST:event_treeFoldersTreeCollapsed
-
+    
     
     private String getAbsolutePathToStudent(String studentName){
         return textFieldRootFolder.getText() + "\\" + studentName;
@@ -298,11 +298,16 @@ public class Main extends javax.swing.JFrame {
         }
     }
     
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        StudentManager studentManager = new StudentManager();
+        try {
+            studentManager.sendEmail("petru.ciubus@utcluj.didatec.ro", "pass", "ocuibus@yahoo.com", "This is your feedback");
+        } catch (javax.mail.MessagingException ex) {
+            System.err.println("Some problem occured with sending email. Most probably authentication issue. You may not use this feature");
+        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
