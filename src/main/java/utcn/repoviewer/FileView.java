@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
+
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.apache.commons.io.FilenameUtils;
@@ -45,6 +44,10 @@ public class FileView extends JPanel{
             textAreaCode.setEnabled(false);
         }
         customizeFileView();
+        //Display the scroll bars only when needed -> It's (more) free real estate
+        sp.setHorizontalScrollBarPolicy(RTextScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sp.setVerticalScrollBarPolicy(RTextScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
         this.add(sp);
 }
     public void customizeFileView(){
