@@ -245,12 +245,16 @@ public class Main extends javax.swing.JFrame {
         //System.out.println("this path was selected: " + treeFolders.getSelectionPath());
         panelViewCode.removeAll();
         if (treeFolders.getSelectionPath() != null){
-            String firstSelectedPath = treeFolders.getSelectionPath().toString();
+            Object[] incapsulatedPath = treeFolders.getSelectionPath().getPath();
+            String relativePathToFile = incapsulatedPath[1].toString();
+            for (int i=2; i < incapsulatedPath.length; i++){
+                relativePathToFile = String.join("\\", relativePathToFile, incapsulatedPath[i].toString());
+            }
             panelViewCode.setLayout(new GridLayout(1, studentsToView.size()));
             // add all fileviews to the panel, but only if selection is a file!
             if (((FileNode)treeFolders.getLastSelectedPathComponent()).isViewableFile){
                 for (String student: studentsToView){
-                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, firstSelectedPath.toString()));
+                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, relativePathToFile));
                     panelViewCode.add(studentFileView);
                 }
             }
