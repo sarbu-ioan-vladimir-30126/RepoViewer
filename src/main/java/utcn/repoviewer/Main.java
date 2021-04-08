@@ -339,7 +339,7 @@ public class Main extends javax.swing.JFrame {
     public static void main(String args[]) {
         StudentManager studentManager = new StudentManager();
         try {
-            studentManager.sendEmail("petru.ciubus@utcluj.didatec.ro", "pass", "ocuibus@yahoo.com", "This is your feedback");
+            studentManager.sendEmail("petru.ciubus@utcluj.didatec.ro", "password", "abc@abc.com", "This is your feedback", null);
         } catch (javax.mail.MessagingException ex) {
             System.err.println("Some problem occured with sending email. Most probably authentication issue. You may not use this feature");
         }
