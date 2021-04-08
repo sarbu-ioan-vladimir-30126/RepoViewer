@@ -103,6 +103,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabelClearSelection.setForeground(new java.awt.Color(0, 0, 204));
         jLabelClearSelection.setText("Clear Selection");
+        jLabelClearSelection.setMaximumSize(jLabelClearSelection.getPreferredSize());
         jLabelClearSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelClearSelection.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
