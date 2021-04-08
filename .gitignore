@@ -6,6 +6,9 @@ target
 # Compiled class file
 *.class
 
+# orig files
+*.orig
+
 # Log file
 *.log
 
