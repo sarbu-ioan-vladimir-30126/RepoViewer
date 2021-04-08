@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class TreePopulator {
     //File fileRoot = new File("C:\\Users\\ocuibus\\Personale\\UTCN\\ISP\\arhiva ISP\\isp-labs-main-03-16-2021-07-14-14\\Adumitrascesei-Gabriela-30126");
-    final String[] allowedFileTypes = new String[] {".java", ".xml"};
+    final String[] allowedFileTypes = new String[] {".java", ".xml", ".jpg", ".png"};
 
     private DefaultTreeModel treeModel;
     public TreePopulator(DefaultTreeModel treeModel){

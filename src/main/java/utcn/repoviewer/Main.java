@@ -242,7 +242,7 @@ public class Main extends javax.swing.JFrame {
             // add all fileviews to the panel, but only if selection is a file!
             if (((FileNode)treeFolders.getLastSelectedPathComponent()).isViewableFile){
                 for (String student: studentsToView){
-                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, relativePathToFile));
+                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, relativePathToFile),studentsToView.size());
                     panelViewCode.add(studentFileView);
                 }
             }
