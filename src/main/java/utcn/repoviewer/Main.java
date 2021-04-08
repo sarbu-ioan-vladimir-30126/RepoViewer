@@ -103,6 +103,7 @@ public class Main extends javax.swing.JFrame {
 
         jLabelClearSelection.setForeground(new java.awt.Color(0, 0, 204));
         jLabelClearSelection.setText("Clear Selection");
+        jLabelClearSelection.setMaximumSize(jLabelClearSelection.getPreferredSize());
         jLabelClearSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelClearSelection.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -150,7 +151,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -207,25 +208,12 @@ public class Main extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tabbedPaneOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(tabbedPaneOptions)
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void buttonChooseRootFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseRootFolderActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
-        chooser.setDialogTitle("Please choose root folder");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            this.loadStudents(chooser.getSelectedFile());
-            textFieldRootFolder.setText(chooser.getSelectedFile().toString());
-        }
-        jListStudents.setModel(studentsList);
-    }//GEN-LAST:event_buttonChooseRootFolderActionPerformed
 
     private void tabbedPaneOptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabbedPaneOptionsMouseClicked
         studentsToView.clear();
@@ -263,34 +251,6 @@ public class Main extends javax.swing.JFrame {
         panelViewCode.repaint();
     }//GEN-LAST:event_treeFoldersValueChanged
 
-    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
-        buttonChooseRootFolderActionPerformed(null);
-    }//GEN-LAST:event_textFieldRootFolderMouseClicked
-
-    private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
-            textFieldSearchFilter.setText("");
-        }
-    }//GEN-LAST:event_textFieldSearchFilterKeyPressed
-
-    private void textFieldSearchFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyReleased
-        jListStudents.setModel(studentsList);
-
-        DefaultListModel<String> newModel = new DefaultListModel<>();
-        for (int i = 0; i < jListStudents.getModel().getSize(); i++) {
-            if (studentsList.get(i).toLowerCase().contains(textFieldSearchFilter.getText().toLowerCase())) {
-                newModel.addElement(studentsList.getElementAt(i));
-            }
-        }
-        jListStudents.setModel(newModel);
-    }//GEN-LAST:event_textFieldSearchFilterKeyReleased
-
-    private void textFieldSearchFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldSearchFilterMouseClicked
-        if (textFieldSearchFilter.getText().equals("Search...")){
-            textFieldSearchFilter.setText("");
-        }
-    }//GEN-LAST:event_textFieldSearchFilterMouseClicked
-
     private void treeFoldersTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeExpanded
         panelView.revalidate();
 
@@ -301,18 +261,59 @@ public class Main extends javax.swing.JFrame {
 
     }//GEN-LAST:event_treeFoldersTreeCollapsed
 
-    private void jLabelClearSelectionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseClicked
-        jListStudents.clearSelection();
-    }//GEN-LAST:event_jLabelClearSelectionMouseClicked
+    private void jLabelClearSelectionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseExited
+        jLabelClearSelection.setText("Clear Selection");
+    }//GEN-LAST:event_jLabelClearSelectionMouseExited
 
     private void jLabelClearSelectionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseEntered
         jLabelClearSelection.setText("<html><a href=''>Clear Selection</a></html>");
     }//GEN-LAST:event_jLabelClearSelectionMouseEntered
 
-    private void jLabelClearSelectionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseExited
-        jLabelClearSelection.setText("Clear Selection");
-    }//GEN-LAST:event_jLabelClearSelectionMouseExited
+    private void jLabelClearSelectionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseClicked
+        jListStudents.clearSelection();
+    }//GEN-LAST:event_jLabelClearSelectionMouseClicked
 
+    private void textFieldSearchFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyReleased
+        jListStudents.setModel(studentsList);
+        
+        DefaultListModel<String> newModel = new DefaultListModel<>();
+        for (int i = 0; i < jListStudents.getModel().getSize(); i++) {
+            if (studentsList.get(i).toLowerCase().contains(textFieldSearchFilter.getText().toLowerCase())) {
+                newModel.addElement(studentsList.getElementAt(i));
+            }
+        }
+        jListStudents.setModel(newModel);
+    }//GEN-LAST:event_textFieldSearchFilterKeyReleased
+
+    private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+            textFieldSearchFilter.setText("");
+        }
+    }//GEN-LAST:event_textFieldSearchFilterKeyPressed
+
+    private void textFieldSearchFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldSearchFilterMouseClicked
+        if (textFieldSearchFilter.getText().equals("Search...")){
+            textFieldSearchFilter.setText("");
+        }
+    }//GEN-LAST:event_textFieldSearchFilterMouseClicked
+
+    private void buttonChooseRootFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseRootFolderActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Please choose root folder");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            this.loadStudents(chooser.getSelectedFile());
+            textFieldRootFolder.setText(chooser.getSelectedFile().toString());
+        }
+        jListStudents.setModel(studentsList);
+    }//GEN-LAST:event_buttonChooseRootFolderActionPerformed
+
+    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
+        buttonChooseRootFolderActionPerformed(null);
+    }//GEN-LAST:event_textFieldRootFolderMouseClicked
+    
     
     private String getAbsolutePathToStudent(String studentName){
         return textFieldRootFolder.getText() + "\\" + studentName;
@@ -332,11 +333,16 @@ public class Main extends javax.swing.JFrame {
         }
     }
     
-    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        StudentManager studentManager = new StudentManager();
+        try {
+            studentManager.sendEmail("petru.ciubus@utcluj.didatec.ro", "password", "abc@abc.com", "This is your feedback", null);
+        } catch (javax.mail.MessagingException ex) {
+            System.err.println("Some problem occured with sending email. Most probably authentication issue. You may not use this feature");
+        }
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
