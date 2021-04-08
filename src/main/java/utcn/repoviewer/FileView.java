@@ -21,6 +21,8 @@ import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.apache.commons.io.FilenameUtils;
@@ -48,8 +50,8 @@ public class FileView extends JPanel{
         if(isImage(fileExtension)){
 
             this.imageArea = new JLabel();
-            Image image;
-            image = getImage(pathToFileAbsolute);
+            System.out.println(pathToFileAbsolute);
+            Image image = getImage(pathToFileAbsolute);
             int height = (image.getHeight(this))/numberOfStudents;
             int width = (image.getWidth(this))/numberOfStudents;
             Icon icon = new ImageIcon(image.getScaledInstance(width,height, (java.awt.Image.SCALE_SMOOTH)));
