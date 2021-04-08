@@ -151,7 +151,7 @@ public class Main extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -208,25 +208,12 @@ public class Main extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tabbedPaneOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(tabbedPaneOptions)
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void buttonChooseRootFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseRootFolderActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
-        chooser.setDialogTitle("Please choose root folder");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            this.loadStudents(chooser.getSelectedFile());
-            textFieldRootFolder.setText(chooser.getSelectedFile().toString());
-        }
-        jListStudents.setModel(studentsList);
-    }//GEN-LAST:event_buttonChooseRootFolderActionPerformed
 
     private void tabbedPaneOptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabbedPaneOptionsMouseClicked
         studentsToView.clear();
@@ -264,15 +251,27 @@ public class Main extends javax.swing.JFrame {
         panelViewCode.repaint();
     }//GEN-LAST:event_treeFoldersValueChanged
 
-    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
-        buttonChooseRootFolderActionPerformed(null);
-    }//GEN-LAST:event_textFieldRootFolderMouseClicked
+    private void treeFoldersTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeExpanded
+        panelView.revalidate();
 
-    private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
-            textFieldSearchFilter.setText("");
-        }
-    }//GEN-LAST:event_textFieldSearchFilterKeyPressed
+    }//GEN-LAST:event_treeFoldersTreeExpanded
+
+    private void treeFoldersTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeCollapsed
+        panelView.revalidate();
+
+    }//GEN-LAST:event_treeFoldersTreeCollapsed
+
+    private void jLabelClearSelectionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseExited
+        jLabelClearSelection.setText("Clear Selection");
+    }//GEN-LAST:event_jLabelClearSelectionMouseExited
+
+    private void jLabelClearSelectionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseEntered
+        jLabelClearSelection.setText("<html><a href=''>Clear Selection</a></html>");
+    }//GEN-LAST:event_jLabelClearSelectionMouseEntered
+
+    private void jLabelClearSelectionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseClicked
+        jListStudents.clearSelection();
+    }//GEN-LAST:event_jLabelClearSelectionMouseClicked
 
     private void textFieldSearchFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyReleased
         jListStudents.setModel(studentsList);
@@ -286,33 +285,34 @@ public class Main extends javax.swing.JFrame {
         jListStudents.setModel(newModel);
     }//GEN-LAST:event_textFieldSearchFilterKeyReleased
 
+    private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+            textFieldSearchFilter.setText("");
+        }
+    }//GEN-LAST:event_textFieldSearchFilterKeyPressed
+
     private void textFieldSearchFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldSearchFilterMouseClicked
         if (textFieldSearchFilter.getText().equals("Search...")){
             textFieldSearchFilter.setText("");
         }
     }//GEN-LAST:event_textFieldSearchFilterMouseClicked
 
-    private void treeFoldersTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeExpanded
-        panelView.revalidate();
+    private void buttonChooseRootFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseRootFolderActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Please choose root folder");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            this.loadStudents(chooser.getSelectedFile());
+            textFieldRootFolder.setText(chooser.getSelectedFile().toString());
+        }
+        jListStudents.setModel(studentsList);
+    }//GEN-LAST:event_buttonChooseRootFolderActionPerformed
 
-    }//GEN-LAST:event_treeFoldersTreeExpanded
-
-    private void treeFoldersTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeCollapsed
-        panelView.revalidate();
-
-    }//GEN-LAST:event_treeFoldersTreeCollapsed
-
-    private void jLabelClearSelectionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseClicked
-        jListStudents.clearSelection();
-    }//GEN-LAST:event_jLabelClearSelectionMouseClicked
-
-    private void jLabelClearSelectionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseEntered
-        jLabelClearSelection.setText("<html><a href=''>Clear Selection</a></html>");
-    }//GEN-LAST:event_jLabelClearSelectionMouseEntered
-
-    private void jLabelClearSelectionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseExited
-        jLabelClearSelection.setText("Clear Selection");
-    }//GEN-LAST:event_jLabelClearSelectionMouseExited
+    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
+        buttonChooseRootFolderActionPerformed(null);
+    }//GEN-LAST:event_textFieldRootFolderMouseClicked
 
     
     private String getAbsolutePathToStudent(String studentName){
