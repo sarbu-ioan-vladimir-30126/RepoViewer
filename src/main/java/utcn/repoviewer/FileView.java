@@ -37,6 +37,8 @@ public class FileView extends JPanel{
     JLabel imageArea;
     String fileExtension;
     
+    static String[] allowedImageTypes = new String[] {"jpg", "png"};
+    
     public FileView(String studentName, String pathToFileAbsolute, int numberOfStudents){
         this.setLayout(new BoxLayout (this, BoxLayout.Y_AXIS));
         JLabel labelStudentName = new JLabel(studentName);
@@ -65,11 +67,11 @@ public class FileView extends JPanel{
                 if (fileContent.isEmpty()){
                     textAreaCode.setEnabled(false);
                 }
-                customizeFileView();
+                customizeCodeFileView();
                 this.add(sp);
             }
 }
-    public void customizeFileView(){
+    public void customizeCodeFileView(){
         if(fileExtension.equals("java")){  //check if the file is .java
             textAreaCode.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA); //set style java
         }
@@ -113,14 +115,13 @@ public class FileView extends JPanel{
     }
     
     private boolean isImage(String path){
-        boolean ret = false;
-        final String[] allowedFileTypes = new String[] {"jpg", "png"};
-            for(String types :allowedFileTypes){
+        boolean isImage = false;
+            for(String types :allowedImageTypes){
                 if(path.equals(types)){
-                    ret = true;
+                    isImage = true;
                 }
             }   
-        return ret;    
+        return isImage;    
     }
     // student name
     // code area
