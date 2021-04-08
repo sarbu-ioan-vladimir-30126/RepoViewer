@@ -37,4 +37,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
                 return name;
             }
         }
+        
+    public String getAbsolutePath(){
+        return file.getAbsolutePath();
+    }
     }

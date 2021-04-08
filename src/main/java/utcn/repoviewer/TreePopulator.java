@@ -50,7 +50,7 @@ public class TreePopulator {
             File newFile = files[0];
             //Directory pass
             if(newFile.isDirectory()){
-                name += " / " + newFile.getName() + createChildren(newFile, node);
+                name += "\\" + newFile.getName() + createChildren(newFile, node);
                 node.setAlternativeName(newFile.getParentFile().getName() + name);
                 return name;
             }

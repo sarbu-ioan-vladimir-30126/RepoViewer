@@ -51,6 +51,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jListStudents = new javax.swing.JList<>();
         textFieldSearchFilter = new javax.swing.JTextField();
+        jLabelClearSelection = new javax.swing.JLabel();
         panelView = new javax.swing.JPanel();
         scrollPaneFolderSelect = new javax.swing.JScrollPane();
         treeFolders = new javax.swing.JTree();
@@ -100,39 +101,57 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        jLabelClearSelection.setForeground(new java.awt.Color(0, 0, 204));
+        jLabelClearSelection.setText("Clear Selection");
+        jLabelClearSelection.setMaximumSize(jLabelClearSelection.getPreferredSize());
+        jLabelClearSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabelClearSelection.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelClearSelectionMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabelClearSelectionMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jLabelClearSelectionMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelChooseFolderLayout = new javax.swing.GroupLayout(panelChooseFolder);
         panelChooseFolder.setLayout(panelChooseFolderLayout);
         panelChooseFolderLayout.setHorizontalGroup(
             panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelChooseFolderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelChooseFolderLayout.createSequentialGroup()
+                .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelChooseFolderLayout.createSequentialGroup()
                         .addComponent(labelCurrentFolder)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(textFieldRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelChooseFolderLayout.createSequentialGroup()
-                        .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(186, 186, 186)))
-                .addGap(332, 332, 332))
+                        .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(248, 248, 248)
+                .addComponent(jLabelClearSelection)
+                .addContainerGap())
         );
         panelChooseFolderLayout.setVerticalGroup(
             panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelChooseFolderLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabelClearSelection))
                     .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(labelCurrentFolder)
                         .addComponent(textFieldRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -189,25 +208,12 @@ public class Main extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(tabbedPaneOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(tabbedPaneOptions)
+                .addGap(0, 0, 0))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void buttonChooseRootFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseRootFolderActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("."));
-        chooser.setDialogTitle("Please choose root folder");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            this.loadStudents(chooser.getSelectedFile());
-            textFieldRootFolder.setText(chooser.getSelectedFile().toString());
-        }
-        jListStudents.setModel(studentsList);
-    }//GEN-LAST:event_buttonChooseRootFolderActionPerformed
 
     private void tabbedPaneOptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabbedPaneOptionsMouseClicked
         studentsToView.clear();
@@ -227,12 +233,16 @@ public class Main extends javax.swing.JFrame {
         //System.out.println("this path was selected: " + treeFolders.getSelectionPath());
         panelViewCode.removeAll();
         if (treeFolders.getSelectionPath() != null){
-            String firstSelectedPath = treeFolders.getSelectionPath().toString();
+            Object[] incapsulatedPath = treeFolders.getSelectionPath().getPath();
+            String relativePathToFile = incapsulatedPath[1].toString();
+            for (int i=2; i < incapsulatedPath.length; i++){
+                relativePathToFile = String.join("\\", relativePathToFile, incapsulatedPath[i].toString());
+            }
             panelViewCode.setLayout(new GridLayout(1, studentsToView.size()));
             // add all fileviews to the panel, but only if selection is a file!
             if (((FileNode)treeFolders.getLastSelectedPathComponent()).isViewableFile){
                 for (String student: studentsToView){
-                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, firstSelectedPath.toString()));
+                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, relativePathToFile));
                     panelViewCode.add(studentFileView);
                 }
             }
@@ -241,15 +251,27 @@ public class Main extends javax.swing.JFrame {
         panelViewCode.repaint();
     }//GEN-LAST:event_treeFoldersValueChanged
 
-    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
-        buttonChooseRootFolderActionPerformed(null);
-    }//GEN-LAST:event_textFieldRootFolderMouseClicked
+    private void treeFoldersTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeExpanded
+        panelView.revalidate();
 
-    private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
-            textFieldSearchFilter.setText("");
-        }
-    }//GEN-LAST:event_textFieldSearchFilterKeyPressed
+    }//GEN-LAST:event_treeFoldersTreeExpanded
+
+    private void treeFoldersTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeCollapsed
+        panelView.revalidate();
+
+    }//GEN-LAST:event_treeFoldersTreeCollapsed
+
+    private void jLabelClearSelectionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseExited
+        jLabelClearSelection.setText("Clear Selection");
+    }//GEN-LAST:event_jLabelClearSelectionMouseExited
+
+    private void jLabelClearSelectionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseEntered
+        jLabelClearSelection.setText("<html><a href=''>Clear Selection</a></html>");
+    }//GEN-LAST:event_jLabelClearSelectionMouseEntered
+
+    private void jLabelClearSelectionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClearSelectionMouseClicked
+        jListStudents.clearSelection();
+    }//GEN-LAST:event_jLabelClearSelectionMouseClicked
 
     private void textFieldSearchFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyReleased
         jListStudents.setModel(studentsList);
@@ -263,21 +285,34 @@ public class Main extends javax.swing.JFrame {
         jListStudents.setModel(newModel);
     }//GEN-LAST:event_textFieldSearchFilterKeyReleased
 
+    private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+            textFieldSearchFilter.setText("");
+        }
+    }//GEN-LAST:event_textFieldSearchFilterKeyPressed
+
     private void textFieldSearchFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldSearchFilterMouseClicked
         if (textFieldSearchFilter.getText().equals("Search...")){
             textFieldSearchFilter.setText("");
         }
     }//GEN-LAST:event_textFieldSearchFilterMouseClicked
 
-    private void treeFoldersTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeExpanded
-        panelView.revalidate();
+    private void buttonChooseRootFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonChooseRootFolderActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Please choose root folder");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            this.loadStudents(chooser.getSelectedFile());
+            textFieldRootFolder.setText(chooser.getSelectedFile().toString());
+        }
+        jListStudents.setModel(studentsList);
+    }//GEN-LAST:event_buttonChooseRootFolderActionPerformed
 
-    }//GEN-LAST:event_treeFoldersTreeExpanded
-
-    private void treeFoldersTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treeFoldersTreeCollapsed
-        panelView.revalidate();
-
-    }//GEN-LAST:event_treeFoldersTreeCollapsed
+    private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
+        buttonChooseRootFolderActionPerformed(null);
+    }//GEN-LAST:event_textFieldRootFolderMouseClicked
     
     
     private String getAbsolutePathToStudent(String studentName){
@@ -341,6 +376,7 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonChooseRootFolder;
+    private javax.swing.JLabel jLabelClearSelection;
     private javax.swing.JList<String> jListStudents;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel labelCurrentFolder;
