@@ -2,38 +2,30 @@
 * To change this license header, choose License Headers in Project Properties.
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
-*/
+ */
 package utcn.repoviewer;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.time.Clock;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import javax.swing.*;
-import javax.swing.plaf.SplitPaneUI;
-import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-
 
 /**
  *
  * @author ocuibus
  */
 public class Main extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -218,7 +210,7 @@ public class Main extends javax.swing.JFrame {
     private void tabbedPaneOptionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabbedPaneOptionsMouseClicked
         studentsToView.clear();
         studentsToView.addAll(jListStudents.getSelectedValuesList());
-        if (studentsToView.size() > 0){
+        if (studentsToView.size() > 0) {
             String defaultStudentForFolderStructure = studentsToView.get(0);
             String absolutePathToStudentFolder = getAbsolutePathToStudent(defaultStudentForFolderStructure);
             //System.out.println("this folder was selected" + absolutePathToStudentFolder);
@@ -232,17 +224,17 @@ public class Main extends javax.swing.JFrame {
     private void treeFoldersValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeFoldersValueChanged
         //System.out.println("this path was selected: " + treeFolders.getSelectionPath());
         panelViewCode.removeAll();
-        if (treeFolders.getSelectionPath() != null){
+        if (treeFolders.getSelectionPath() != null) {
             Object[] incapsulatedPath = treeFolders.getSelectionPath().getPath();
             String relativePathToFile = incapsulatedPath[1].toString();
-            for (int i=2; i < incapsulatedPath.length; i++){
+            for (int i = 2; i < incapsulatedPath.length; i++) {
                 relativePathToFile = String.join("\\", relativePathToFile, incapsulatedPath[i].toString());
             }
             panelViewCode.setLayout(new GridLayout(1, studentsToView.size()));
             // add all fileviews to the panel, but only if selection is a file!
-            if (((FileNode)treeFolders.getLastSelectedPathComponent()).isViewableFile){
-                for (String student: studentsToView){
-                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, relativePathToFile),studentsToView.size());
+            if (((FileNode) treeFolders.getLastSelectedPathComponent()).isViewableFile) {
+                for (String student : studentsToView) {
+                    FileView studentFileView = new FileView(student, getAbsolutePathToFile(student, relativePathToFile), studentsToView.size());
                     panelViewCode.add(studentFileView);
                 }
             }
@@ -275,7 +267,7 @@ public class Main extends javax.swing.JFrame {
 
     private void textFieldSearchFilterKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyReleased
         jListStudents.setModel(studentsList);
-        
+
         DefaultListModel<String> newModel = new DefaultListModel<>();
         for (int i = 0; i < jListStudents.getModel().getSize(); i++) {
             if (studentsList.get(i).toLowerCase().contains(textFieldSearchFilter.getText().toLowerCase())) {
@@ -286,13 +278,13 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_textFieldSearchFilterKeyReleased
 
     private void textFieldSearchFilterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldSearchFilterKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             textFieldSearchFilter.setText("");
         }
     }//GEN-LAST:event_textFieldSearchFilterKeyPressed
 
     private void textFieldSearchFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldSearchFilterMouseClicked
-        if (textFieldSearchFilter.getText().equals("Search...")){
+        if (textFieldSearchFilter.getText().equals("Search...")) {
             textFieldSearchFilter.setText("");
         }
     }//GEN-LAST:event_textFieldSearchFilterMouseClicked
@@ -313,26 +305,26 @@ public class Main extends javax.swing.JFrame {
     private void textFieldRootFolderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_textFieldRootFolderMouseClicked
         buttonChooseRootFolderActionPerformed(null);
     }//GEN-LAST:event_textFieldRootFolderMouseClicked
-    
-    
-    private String getAbsolutePathToStudent(String studentName){
+
+    private String getAbsolutePathToStudent(String studentName) {
         return textFieldRootFolder.getText() + "\\" + studentName;
     }
-    
-    private String getAbsolutePathToFile(String studentName, String filePath){
+
+    private String getAbsolutePathToFile(String studentName, String filePath) {
         return textFieldRootFolder.getText() + "\\" + studentName + "\\" + filePath;
     }
-    
-    private void loadStudents(File rootFolder){
+
+    private void loadStudents(File rootFolder) {
         studentsList.clear();
-        for (File studentFolder : rootFolder.listFiles()){
+        for (File studentFolder : rootFolder.listFiles()) {
             //TODO: parse student name from folder name
             //TODO: only display folders that match the pattern isp-main-name-surname-group
-            if (studentFolder.isDirectory())
+            if (studentFolder.isDirectory()) {
                 studentsList.addElement(studentFolder.getName());
+            }
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -347,7 +339,7 @@ public class Main extends javax.swing.JFrame {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-        */
+         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -365,7 +357,7 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
