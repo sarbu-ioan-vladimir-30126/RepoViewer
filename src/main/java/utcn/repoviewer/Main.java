@@ -5,10 +5,15 @@
  */
 package utcn.repoviewer;
 
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -44,6 +49,11 @@ public class Main extends javax.swing.JFrame {
         jListStudents = new javax.swing.JList<>();
         textFieldSearchFilter = new javax.swing.JTextField();
         jLabelClearSelection = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextAreaEmailBody = new javax.swing.JTextArea();
+        buttonSendAllEmails = new javax.swing.JButton();
+        buttonSendEmail = new javax.swing.JButton();
+        jLabelEmailBody = new javax.swing.JLabel();
         panelView = new javax.swing.JPanel();
         scrollPaneFolderSelect = new javax.swing.JScrollPane();
         treeFolders = new javax.swing.JTree();
@@ -76,6 +86,11 @@ public class Main extends javax.swing.JFrame {
         });
 
         jListStudents.setModel(studentsList);
+        jListStudents.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jListStudentsValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(jListStudents);
 
         textFieldSearchFilter.setText("Search...");
@@ -95,7 +110,6 @@ public class Main extends javax.swing.JFrame {
 
         jLabelClearSelection.setForeground(new java.awt.Color(0, 0, 204));
         jLabelClearSelection.setText("Clear Selection");
-        jLabelClearSelection.setMaximumSize(jLabelClearSelection.getPreferredSize());
         jLabelClearSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelClearSelection.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -108,6 +122,28 @@ public class Main extends javax.swing.JFrame {
                 jLabelClearSelectionMouseExited(evt);
             }
         });
+
+        jTextAreaEmailBody.setColumns(20);
+        jTextAreaEmailBody.setRows(5);
+        jScrollPane3.setViewportView(jTextAreaEmailBody);
+
+        buttonSendAllEmails.setText("send all emails");
+        buttonSendAllEmails.setEnabled(false);
+        buttonSendAllEmails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSendAllEmailsActionPerformed(evt);
+            }
+        });
+
+        buttonSendEmail.setText("send email");
+        buttonSendEmail.setEnabled(false);
+        buttonSendEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSendEmailActionPerformed(evt);
+            }
+        });
+
+        jLabelEmailBody.setText("email body :");
 
         javax.swing.GroupLayout panelChooseFolderLayout = new javax.swing.GroupLayout(panelChooseFolder);
         panelChooseFolder.setLayout(panelChooseFolderLayout);
@@ -125,9 +161,18 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(buttonChooseRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(248, 248, 248)
-                .addComponent(jLabelClearSelection)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabelClearSelection)
+                        .addGroup(panelChooseFolderLayout.createSequentialGroup()
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(buttonSendAllEmails, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(buttonSendEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jLabelEmailBody))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelChooseFolderLayout.setVerticalGroup(
             panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,10 +186,21 @@ public class Main extends javax.swing.JFrame {
                         .addComponent(labelCurrentFolder)
                         .addComponent(textFieldRootFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
-                .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(textFieldSearchFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelEmailBody))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 301, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                    .addGroup(panelChooseFolderLayout.createSequentialGroup()
+                        .addGroup(panelChooseFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(panelChooseFolderLayout.createSequentialGroup()
+                                .addComponent(buttonSendAllEmails)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(buttonSendEmail))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(0, 91, Short.MAX_VALUE))
         );
 
         textFieldRootFolder.getAccessibleContext().setAccessibleName("");
@@ -180,7 +236,7 @@ public class Main extends javax.swing.JFrame {
         panelViewCode.setLayout(panelViewCodeLayout);
         panelViewCodeLayout.setHorizontalGroup(
             panelViewCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 658, Short.MAX_VALUE)
+            .addGap(0, 677, Short.MAX_VALUE)
         );
         panelViewCodeLayout.setVerticalGroup(
             panelViewCodeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -306,6 +362,129 @@ public class Main extends javax.swing.JFrame {
         buttonChooseRootFolderActionPerformed(null);
     }//GEN-LAST:event_textFieldRootFolderMouseClicked
 
+    private void jListStudentsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jListStudentsValueChanged
+        List<String> strings = jListStudents.getSelectedValuesList();
+        if (strings.size() > 1) {
+            buttonSendEmail.setEnabled(false);
+            buttonSendAllEmails.setEnabled(true);
+        } else if (strings.size() == 1) {
+            buttonSendEmail.setEnabled(true);
+            buttonSendAllEmails.setEnabled(false);
+        } else {
+            buttonSendEmail.setEnabled(false);
+            buttonSendAllEmails.setEnabled(false);
+        }
+    }//GEN-LAST:event_jListStudentsValueChanged
+
+    private void buttonSendAllEmailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSendAllEmailsActionPerformed
+        List<String> selectedStudents = jListStudents.getSelectedValuesList();
+        List<String> studentsThatWillReceiveEmail = new ArrayList<>();
+        List<String> studentsThatWillNotReceiveEmail = new ArrayList<>();
+        String emailBodyString = jTextAreaEmailBody.getText();
+        FilenameFilter textFilter = (File dir, String name1) -> name1.toLowerCase().endsWith(".txt");
+        File[] files = new File("src\\main\\students files").listFiles(textFilter);
+        boolean hasFile;
+        for (String student : selectedStudents) {
+            hasFile = false;
+            for (File file : files) {
+                if (file.getName().equals(student + ".txt")) {
+                    studentsThatWillReceiveEmail.add(student);
+                    hasFile = true;
+                }
+            }
+            if (!hasFile) {
+                studentsThatWillNotReceiveEmail.add(student);
+            }
+        }
+        int result;
+        if (studentsThatWillNotReceiveEmail.isEmpty()) {
+            result = JOptionPane.showConfirmDialog(null, "Are you sure you want to send an email to all selected students ?", "SEND MAIL TO ALL SELECTED STUDENTS", JOptionPane.YES_NO_OPTION);
+        } else if (studentsThatWillNotReceiveEmail.size() == selectedStudents.size()) {
+            Object[] options = {"OK"};
+            JOptionPane.showOptionDialog(null,
+                    "The students you selected do not have a feedback file so they will not receive any mail", "SEND MAIL TO STUDENTS",
+                    JOptionPane.PLAIN_MESSAGE,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+            result = 10;
+        } else {
+            String studentsThatNotHaveAFile = "";
+            StringBuilder stringBuilder = new StringBuilder(studentsThatNotHaveAFile);
+            for (String string : studentsThatWillNotReceiveEmail) {
+                stringBuilder.append("\n" + string);
+            }
+            result = JOptionPane.showConfirmDialog(null, "Students that do not have a file : " + stringBuilder.toString() + "\n\n These students will not receive this mail.\nDo you want to continue ?", "SEND MAIL TO ALL SELECTED STUDENTS", JOptionPane.YES_NO_OPTION);
+        }
+        if (result == JOptionPane.YES_OPTION) {
+            for (String student : studentsThatWillReceiveEmail) {
+                for (File file : files) {
+                    if (file.getName().equals(student + ".txt")) {
+                        String filePath = file.getPath();
+                        String fromEmail = "";
+                        String password = "";
+                        String toEmail = "";
+                        ArrayList<StudentInformation> studentInformations = new StudentManager().getStudentsInformation();
+                        for (StudentInformation studentInformation : studentInformations) {
+                            if (student.contains(studentInformation.name.toLowerCase()) && student.contains(studentInformation.surname.toLowerCase()) && student.contains(studentInformation.groupId)) {
+                                toEmail = studentInformation.emailAddress;
+                                break;
+                            }
+                        }
+                        try {
+                            new StudentManager().sendEmail(fromEmail, password, toEmail, emailBodyString, filePath);
+                            //System.out.println("Sent email to : " + toEmail + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + filePath + "\nEmail body : " + emailBodyString);
+                        } catch (MessagingException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_buttonSendAllEmailsActionPerformed
+
+    private void buttonSendEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSendEmailActionPerformed
+        String selectedStudent = jListStudents.getSelectedValuesList().get(0);
+        String emailBodyString = jTextAreaEmailBody.getText();
+        String filePath = "";
+        File f = new File("src\\main\\students files");
+        FilenameFilter textFilter = (File dir, String name1) -> name1.toLowerCase().endsWith(".txt");
+        File[] files = f.listFiles(textFilter);
+        for (File file : files) {
+            if (file.getName().equals(selectedStudent + ".txt")) {
+                filePath = file.getPath();
+            }
+        }
+        if (filePath.isBlank()) {
+            Object[] options = {"OK"};
+            JOptionPane.showOptionDialog(null,
+                    "This student does not have a file to be attached to the email.", "SEND MAIL TO " + selectedStudent,
+                    JOptionPane.PLAIN_MESSAGE,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+        } else {
+            String fromEmail = "";
+            String password = "";
+            String toEmail = "";
+            ArrayList<StudentInformation> studentInformations = new StudentManager().getStudentsInformation();
+            for (StudentInformation studentInformation : studentInformations) {
+                if (selectedStudent.contains(studentInformation.name.toLowerCase()) && selectedStudent.contains(studentInformation.surname.toLowerCase()) && selectedStudent.contains(studentInformation.groupId)) {
+                    toEmail = studentInformation.emailAddress;
+                    break;
+                }
+            }
+            try {
+                new StudentManager().sendEmail(fromEmail, password, toEmail, emailBodyString, filePath);
+                // System.out.println("Sent email to : " + toEmail + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + filePath + "\nEmail body : " + emailBodyString);
+            } catch (MessagingException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_buttonSendEmailActionPerformed
+
     private String getAbsolutePathToStudent(String studentName) {
         return textFieldRootFolder.getText() + "\\" + studentName;
     }
@@ -368,9 +547,14 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonChooseRootFolder;
+    private javax.swing.JButton buttonSendAllEmails;
+    private javax.swing.JButton buttonSendEmail;
     private javax.swing.JLabel jLabelClearSelection;
+    private javax.swing.JLabel jLabelEmailBody;
     private javax.swing.JList<String> jListStudents;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea jTextAreaEmailBody;
     private javax.swing.JLabel labelCurrentFolder;
     private javax.swing.JPanel panelChooseFolder;
     private javax.swing.JPanel panelView;

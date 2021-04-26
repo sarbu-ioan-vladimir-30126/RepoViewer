@@ -16,7 +16,7 @@ public class FeedbackManagement {
     public static String getDataFromFile(String studentName) {
         String fileName = studentName + ".txt";
         try {
-            return Files.readString(Paths.get(fileName), StandardCharsets.US_ASCII);
+            return Files.readString(Paths.get("src\\main\\students files\\" + fileName), StandardCharsets.US_ASCII);
         } catch (IOException ex) {
             System.out.println("Could not create the message for the file");
             return null;
@@ -25,7 +25,7 @@ public class FeedbackManagement {
 
     public static void appendLineToFileForStudent(String studentName, String message) {
         String fileName = studentName + ".txt";
-        File fileObject = new File(fileName);
+        File fileObject = new File("src\\main\\students files\\" + fileName);
         try {
             FileWriter fileWriter = new FileWriter(fileObject, true);
             fileObject.createNewFile();

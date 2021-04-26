@@ -35,6 +35,8 @@ import javax.mail.internet.MimeMultipart;
  */
 public class StudentManager {
 
+    public static final boolean DoSendEmails = false;
+
     public StudentManager() {
         try {
             this.loadStudentsInformation();
@@ -95,6 +97,10 @@ public class StudentManager {
             StudentInformation studentInfo = new StudentInformation(str[3], str[2], str[4], str[1], str[5]);
             studentsInformation.add(studentInfo);
         }
+    }
+
+    public ArrayList<StudentInformation> getStudentsInformation() {
+        return studentsInformation;
     }
 
     private ArrayList<StudentInformation> studentsInformation = new ArrayList<StudentInformation>();
