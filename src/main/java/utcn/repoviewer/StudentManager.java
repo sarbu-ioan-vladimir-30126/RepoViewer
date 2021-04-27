@@ -46,7 +46,7 @@ public class StudentManager {
         }
     }
 
-    public void sendEmail(String fromEmail, String password, String toEmail, String emailBody, String fullPathToAttachment) throws MessagingException {
+    public static void sendEmail(String fromEmail, String password, String toEmail, String emailBody, String fullPathToAttachment) throws MessagingException {
         String host = "smtp.office365.com";
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -83,7 +83,9 @@ public class StudentManager {
         }
         // Send the complete message parts
         message.setContent(multipart);
-        Transport.send(message);
+        if (DoSendEmails) {
+            Transport.send(message);
+        }
     }
 
     private void loadStudentsInformation() throws FileNotFoundException, IOException {
@@ -99,9 +101,19 @@ public class StudentManager {
         }
     }
 
-    public ArrayList<StudentInformation> getStudentsInformation() {
+    public static ArrayList<StudentInformation> getStudentsInformation() {
         return studentsInformation;
     }
 
-    private ArrayList<StudentInformation> studentsInformation = new ArrayList<StudentInformation>();
+    public static String getEmailForRepo(String studentName) {
+        for (StudentInformation studentInformation : studentsInformation) {
+            if (studentInformation.repoLink.substring(14, studentInformation.repoLink.length()).equals(studentName)) {
+                return studentInformation.emailAddress;
+            }
+        }
+        System.out.println("The mail could not be found ");
+        return "";
+    }
+
+    private static ArrayList<StudentInformation> studentsInformation = new ArrayList<StudentInformation>();
 }

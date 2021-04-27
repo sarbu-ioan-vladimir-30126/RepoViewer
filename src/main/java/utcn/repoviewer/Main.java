@@ -8,7 +8,6 @@ package utcn.repoviewer;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -378,112 +377,59 @@ public class Main extends javax.swing.JFrame {
 
     private void buttonSendAllEmailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSendAllEmailsActionPerformed
         List<String> selectedStudents = jListStudents.getSelectedValuesList();
-        List<String> studentsThatWillReceiveEmail = new ArrayList<>();
-        List<String> studentsThatWillNotReceiveEmail = new ArrayList<>();
-        String emailBodyString = jTextAreaEmailBody.getText();
-        FilenameFilter textFilter = (File dir, String name1) -> name1.toLowerCase().endsWith(".txt");
-        File[] files = new File("src\\main\\students files").listFiles(textFilter);
-        boolean hasFile;
+        List<String> studentsThatDoNotHaveAFeedbackFile = new ArrayList<>();
+        List<String> studentsThatHaveAFeedbackFile = new ArrayList<>();
         for (String student : selectedStudents) {
-            hasFile = false;
-            for (File file : files) {
-                if (file.getName().equals(student + ".txt")) {
-                    studentsThatWillReceiveEmail.add(student);
-                    hasFile = true;
-                }
-            }
-            if (!hasFile) {
-                studentsThatWillNotReceiveEmail.add(student);
+            if (FeedbackManagement.checkIfStudentHasFeedbackFile(student)) {
+                studentsThatHaveAFeedbackFile.add(student);
+            } else {
+                studentsThatDoNotHaveAFeedbackFile.add(student);
             }
         }
         int result;
-        if (studentsThatWillNotReceiveEmail.isEmpty()) {
+        if (studentsThatDoNotHaveAFeedbackFile.isEmpty()) {
             result = JOptionPane.showConfirmDialog(null, "Are you sure you want to send an email to all selected students ?", "SEND MAIL TO ALL SELECTED STUDENTS", JOptionPane.YES_NO_OPTION);
-        } else if (studentsThatWillNotReceiveEmail.size() == selectedStudents.size()) {
-            Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(null,
-                    "The students you selected do not have a feedback file so they will not receive any mail", "SEND MAIL TO STUDENTS",
-                    JOptionPane.PLAIN_MESSAGE,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
+        } else if (studentsThatDoNotHaveAFeedbackFile.size() == selectedStudents.size()) {
+            displayOneButtonOptionPane("COULD NOT SEND MAIL TO STUDENTS", "The students you selected do not have a feedback file so they will not receive any mail", "OK");
             result = 10;
         } else {
             String studentsThatNotHaveAFile = "";
             StringBuilder stringBuilder = new StringBuilder(studentsThatNotHaveAFile);
-            for (String string : studentsThatWillNotReceiveEmail) {
+            for (String string : studentsThatDoNotHaveAFeedbackFile) {
                 stringBuilder.append("\n" + string);
             }
             result = JOptionPane.showConfirmDialog(null, "Students that do not have a file : " + stringBuilder.toString() + "\n\n These students will not receive this mail.\nDo you want to continue ?", "SEND MAIL TO ALL SELECTED STUDENTS", JOptionPane.YES_NO_OPTION);
         }
         if (result == JOptionPane.YES_OPTION) {
-            for (String student : studentsThatWillReceiveEmail) {
-                for (File file : files) {
-                    if (file.getName().equals(student + ".txt")) {
-                        String filePath = file.getPath();
-                        String fromEmail = "";
-                        String password = "";
-                        String toEmail = "";
-                        ArrayList<StudentInformation> studentInformations = new StudentManager().getStudentsInformation();
-                        for (StudentInformation studentInformation : studentInformations) {
-                            if (student.contains(studentInformation.name.toLowerCase()) && student.contains(studentInformation.surname.toLowerCase()) && student.contains(studentInformation.groupId)) {
-                                toEmail = studentInformation.emailAddress;
-                                break;
-                            }
-                        }
-                        try {
-                            new StudentManager().sendEmail(fromEmail, password, toEmail, emailBodyString, filePath);
-                            //System.out.println("Sent email to : " + toEmail + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + filePath + "\nEmail body : " + emailBodyString);
-                        } catch (MessagingException ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
+            for (String student : studentsThatHaveAFeedbackFile) {
+                try {
+                    StudentManager.sendEmail(fromEmail, password, StudentManager.getEmailForRepo(student), jTextAreaEmailBody.getText(), FeedbackManagement.getStudentFilePath(student));
+                } catch (MessagingException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
+//                System.out.println("Sent email to : " + StudentManager.getEmailForRepo(student) + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + FeedbackManagement.getStudentFilePath(student) + "\nEmail body : " + jTextAreaEmailBody.getText());
             }
         }
     }//GEN-LAST:event_buttonSendAllEmailsActionPerformed
 
     private void buttonSendEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSendEmailActionPerformed
         String selectedStudent = jListStudents.getSelectedValuesList().get(0);
-        String emailBodyString = jTextAreaEmailBody.getText();
-        String filePath = "";
-        File f = new File("src\\main\\students files");
-        FilenameFilter textFilter = (File dir, String name1) -> name1.toLowerCase().endsWith(".txt");
-        File[] files = f.listFiles(textFilter);
-        for (File file : files) {
-            if (file.getName().equals(selectedStudent + ".txt")) {
-                filePath = file.getPath();
-            }
-        }
-        if (filePath.isBlank()) {
-            Object[] options = {"OK"};
-            JOptionPane.showOptionDialog(null,
-                    "This student does not have a file to be attached to the email.", "SEND MAIL TO " + selectedStudent,
-                    JOptionPane.PLAIN_MESSAGE,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
+        if (!FeedbackManagement.checkIfStudentHasFeedbackFile(selectedStudent)) {
+            displayOneButtonOptionPane("SEND MAIL TO " + selectedStudent, "This student does not have a file to be attached to the email.", "OK");
         } else {
-            String fromEmail = "";
-            String password = "";
-            String toEmail = "";
-            ArrayList<StudentInformation> studentInformations = new StudentManager().getStudentsInformation();
-            for (StudentInformation studentInformation : studentInformations) {
-                if (selectedStudent.contains(studentInformation.name.toLowerCase()) && selectedStudent.contains(studentInformation.surname.toLowerCase()) && selectedStudent.contains(studentInformation.groupId)) {
-                    toEmail = studentInformation.emailAddress;
-                    break;
-                }
-            }
             try {
-                new StudentManager().sendEmail(fromEmail, password, toEmail, emailBodyString, filePath);
-                // System.out.println("Sent email to : " + toEmail + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + filePath + "\nEmail body : " + emailBodyString);
+                StudentManager.sendEmail(fromEmail, password, StudentManager.getEmailForRepo(selectedStudent), jTextAreaEmailBody.getText(), FeedbackManagement.getStudentFilePath(selectedStudent));
             } catch (MessagingException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
+//            System.out.println("Sent email to : " + StudentManager.getEmailForRepo(selectedStudent) + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + FeedbackManagement.getStudentFilePath(selectedStudent) + "\nEmail body : " + jTextAreaEmailBody.getText());
         }
     }//GEN-LAST:event_buttonSendEmailActionPerformed
+
+    private void displayOneButtonOptionPane(String title, String message, String buttonText) {
+        Object[] options = {buttonText};
+        JOptionPane.showOptionDialog(null, message, title, JOptionPane.PLAIN_MESSAGE, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+    }
 
     private String getAbsolutePathToStudent(String studentName) {
         return textFieldRootFolder.getText() + "\\" + studentName;
@@ -569,4 +515,7 @@ public class Main extends javax.swing.JFrame {
     private DefaultTreeModel treeModelFoldersStructure = new DefaultTreeModel(null);
     private TreePopulator treePopulator = new TreePopulator(treeModelFoldersStructure);
     private ArrayList<String> studentsToView = new ArrayList<String>();
+    private static final String studentsFolderPath = "src\\main\\students files";
+    private String fromEmail = "";
+    private String password = "";
 }

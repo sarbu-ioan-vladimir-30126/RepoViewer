@@ -6,6 +6,8 @@ target
 # Compiled class file
 *.class
 
+.xml
+
 # orig files
 *.orig
 
