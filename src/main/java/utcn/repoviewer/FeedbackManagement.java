@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class FeedbackManagement {
 
-    private static final String studentsFilesDirectoryPath = "src\\main\\students files";
+    static final String studentsFilesDirectoryPath = "src\\main\\students files";
 
     public static String getDataFromFile(String studentName) {
         try {

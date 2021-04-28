@@ -107,7 +107,7 @@ public class StudentManager {
 
     public static String getEmailForRepo(String studentName) {
         for (StudentInformation studentInformation : studentsInformation) {
-            if (studentInformation.repoLink.substring(14, studentInformation.repoLink.length()).equals(studentName)) {
+            if (studentInformation.repoLink.indexOf(studentName) != -1) {
                 return studentInformation.emailAddress;
             }
         }

@@ -125,6 +125,8 @@ public class Main extends javax.swing.JFrame {
         jTextAreaEmailBody.setColumns(20);
         jTextAreaEmailBody.setRows(5);
         jScrollPane3.setViewportView(jTextAreaEmailBody);
+        jTextAreaEmailBody.getAccessibleContext().setAccessibleName("");
+        jTextAreaEmailBody.getAccessibleContext().setAccessibleDescription("");
 
         buttonSendAllEmails.setText("send all emails");
         buttonSendAllEmails.setEnabled(false);
@@ -407,7 +409,7 @@ public class Main extends javax.swing.JFrame {
                 } catch (MessagingException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
-//                System.out.println("Sent email to : " + StudentManager.getEmailForRepo(student) + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + FeedbackManagement.getStudentFilePath(student) + "\nEmail body : " + jTextAreaEmailBody.getText());
+                //System.out.println("Sent email to : " + StudentManager.getEmailForRepo(student) + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + FeedbackManagement.getStudentFilePath(student) + "\nEmail body : " + jTextAreaEmailBody.getText());
             }
         }
     }//GEN-LAST:event_buttonSendAllEmailsActionPerformed
@@ -422,7 +424,7 @@ public class Main extends javax.swing.JFrame {
             } catch (MessagingException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            System.out.println("Sent email to : " + StudentManager.getEmailForRepo(selectedStudent) + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + FeedbackManagement.getStudentFilePath(selectedStudent) + "\nEmail body : " + jTextAreaEmailBody.getText());
+            //System.out.println("Sent email to : " + StudentManager.getEmailForRepo(selectedStudent) + "\nFrom : " + fromEmail + "\nPassword : " + password + "\nAttachment : " + FeedbackManagement.getStudentFilePath(selectedStudent) + "\nEmail body : " + jTextAreaEmailBody.getText());
         }
     }//GEN-LAST:event_buttonSendEmailActionPerformed
 
@@ -515,7 +517,6 @@ public class Main extends javax.swing.JFrame {
     private DefaultTreeModel treeModelFoldersStructure = new DefaultTreeModel(null);
     private TreePopulator treePopulator = new TreePopulator(treeModelFoldersStructure);
     private ArrayList<String> studentsToView = new ArrayList<String>();
-    private static final String studentsFolderPath = "src\\main\\students files";
     private String fromEmail = "";
     private String password = "";
 }

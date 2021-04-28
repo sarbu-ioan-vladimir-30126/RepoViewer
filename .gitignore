@@ -6,7 +6,7 @@ target
 # Compiled class file
 *.class
 
-.xml
+nbactions.xml
 
 # orig files
 *.orig
