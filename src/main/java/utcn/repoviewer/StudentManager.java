@@ -35,6 +35,8 @@ import javax.mail.internet.MimeMultipart;
  */
 public class StudentManager {
 
+    public static final boolean DoSendEmails = false;
+
     public StudentManager() {
         try {
             this.loadStudentsInformation();
@@ -44,7 +46,7 @@ public class StudentManager {
         }
     }
 
-    public void sendEmail(String fromEmail, String password, String toEmail, String emailBody, String fullPathToAttachment) throws MessagingException {
+    public static void sendEmail(String fromEmail, String password, String toEmail, String emailBody, String fullPathToAttachment) throws MessagingException {
         String host = "smtp.office365.com";
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -81,7 +83,9 @@ public class StudentManager {
         }
         // Send the complete message parts
         message.setContent(multipart);
-        Transport.send(message);
+        if (DoSendEmails) {
+            Transport.send(message);
+        }
     }
 
     private void loadStudentsInformation() throws FileNotFoundException, IOException {
@@ -97,5 +101,19 @@ public class StudentManager {
         }
     }
 
-    private ArrayList<StudentInformation> studentsInformation = new ArrayList<StudentInformation>();
+    public static ArrayList<StudentInformation> getStudentsInformation() {
+        return studentsInformation;
+    }
+
+    public static String getEmailForRepo(String studentName) {
+        for (StudentInformation studentInformation : studentsInformation) {
+            if (studentInformation.repoLink.indexOf(studentName) != -1) {
+                return studentInformation.emailAddress;
+            }
+        }
+        System.out.println("The mail could not be found ");
+        return "";
+    }
+
+    private static ArrayList<StudentInformation> studentsInformation = new ArrayList<StudentInformation>();
 }
