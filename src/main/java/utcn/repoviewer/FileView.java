@@ -26,6 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import org.apache.commons.io.FilenameUtils;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -40,7 +41,7 @@ public class FileView extends JPanel {
     RSyntaxTextArea textAreaCode;
     JLabel imageArea;
     String fileExtension;
-
+    JTextArea textAreaMessages;
     static String[] allowedImageTypes = new String[]{"jpg", "png"};
 
     public FileView(String studentName, String pathToFileAbsolute, int numberOfStudents) {
@@ -57,10 +58,20 @@ public class FileView extends JPanel {
         JButton buttonGood = createButton("", Color.decode("#52b788"), new ImageIcon("src\\main\\resources\\like.png"), "goodButton" + studentName, goodButtonActionListener(studentName));
         JButton buttonAverage = createButton("", Color.decode("#ffd819"), new ImageIcon("src\\main\\resources\\remove.png"), "averageButton" + studentName, averageButtonActionListener(studentName));
         JButton buttonWrong = createButton("", Color.decode("#ef233c"), new ImageIcon("src\\main\\resources\\dislike.png"), "wrongButton" + studentName, wrongButtonActionListener(studentName));
-
+        JButton buttonMissing = createButton("", Color.decode("#ef233c"), new ImageIcon("src\\main\\resources\\missing.png"), "missingButton" + studentName, missingButtonActionListener(studentName));
+        
+        textAreaMessages = new JTextArea(3,200);
+        textAreaMessages.setLineWrap(true);
+        textAreaMessages.setWrapStyleWord(true);
+        this.add(textAreaMessages);
+        JButton buttonSaveComment = new JButton("save comment");
+        buttonSaveComment.addActionListener(saveCommentButtonActionListener(studentName));
+        panelFeedBack.add(buttonSaveComment);   
+        
         panelFeedBack.add(buttonGood);
         panelFeedBack.add(buttonAverage);
         panelFeedBack.add(buttonWrong);
+        panelFeedBack.add(buttonMissing);
 
         this.add(panelFeedBack);
 
@@ -169,7 +180,23 @@ public class FileView extends JPanel {
         };
         return buttonActionListener;
     }
+    
+    public ActionListener missingButtonActionListener(String studentName) {
+        ActionListener buttonActionListener = (ActionEvent e) -> {
+            CharSequence evaluatedFilePath = FeedbackManagement.getEvaluatedFilePath(pathToFileAbsolute, studentName);
+            FeedbackManagement.appendLineToFileForStudent(studentName, evaluatedFilePath + " - MISSING");
+        };
+        return buttonActionListener;
+    }
 
+    public ActionListener saveCommentButtonActionListener(String studentName) {
+        ActionListener buttonActionListener = (ActionEvent e) -> {
+            CharSequence evaluatedFilePath = FeedbackManagement.getEvaluatedFilePath(pathToFileAbsolute, studentName);
+            FeedbackManagement.appendLineToFileForStudent(studentName, evaluatedFilePath + " - " + textAreaMessages.getText());
+        };
+        return buttonActionListener;
+    }
+    
     public JButton createButton(String buttonText, Color color, ImageIcon image, String buttonName, ActionListener action) {
         JButton button = new JButton(buttonText, image);
         button.setBackground(color);
