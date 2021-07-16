@@ -2,6 +2,8 @@
 This project is a java swing desktop application that facilitates viewing several files at the same time in order to compare them visually. The files must be in a similar relative folder structure.
 This project is in progress.
 
+Added Team member: Bonca Adelin
+
 Added Team member: Aldea Andrei
 
 Added new git memeber: Enyedi Ervin
