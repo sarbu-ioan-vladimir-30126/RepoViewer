@@ -56,8 +56,6 @@ public class FileView extends JPanel {
         panelFeedBack.setLayout(new FlowLayout());
 
         JButton buttonGood = createButton("", Color.decode("#52b788"), new ImageIcon("src\\main\\resources\\like.png"), "goodButton" + studentName, goodButtonActionListener(studentName));
-        JButton buttonAverage = createButton("", Color.decode("#ffd819"), new ImageIcon("src\\main\\resources\\remove.png"), "averageButton" + studentName, averageButtonActionListener(studentName));
-        JButton buttonWrong = createButton("", Color.decode("#ef233c"), new ImageIcon("src\\main\\resources\\dislike.png"), "wrongButton" + studentName, wrongButtonActionListener(studentName));
         JButton buttonMissing = createButton("", Color.decode("#ef233c"), new ImageIcon("src\\main\\resources\\missing.png"), "missingButton" + studentName, missingButtonActionListener(studentName));
         
         textAreaMessages = new JTextArea(3,200);
@@ -69,8 +67,6 @@ public class FileView extends JPanel {
         panelFeedBack.add(buttonSaveComment);   
         
         panelFeedBack.add(buttonGood);
-        panelFeedBack.add(buttonAverage);
-        panelFeedBack.add(buttonWrong);
         panelFeedBack.add(buttonMissing);
 
         this.add(panelFeedBack);
@@ -161,22 +157,6 @@ public class FileView extends JPanel {
         ActionListener buttonActionListener = (ActionEvent e) -> {
             CharSequence evaluatedFilePath = FeedbackManagement.getEvaluatedFilePath(pathToFileAbsolute, studentName);
             FeedbackManagement.appendLineToFileForStudent(studentName, evaluatedFilePath + " - GOOD");
-        };
-        return buttonActionListener;
-    }
-
-    public ActionListener averageButtonActionListener(String studentName) {
-        ActionListener buttonActionListener = (ActionEvent e) -> {
-            CharSequence evaluatedFilePath = FeedbackManagement.getEvaluatedFilePath(pathToFileAbsolute, studentName);
-            FeedbackManagement.appendLineToFileForStudent(studentName, evaluatedFilePath + " - AVERAGE");
-        };
-        return buttonActionListener;
-    }
-
-    public ActionListener wrongButtonActionListener(String studentName) {
-        ActionListener buttonActionListener = (ActionEvent e) -> {
-            CharSequence evaluatedFilePath = FeedbackManagement.getEvaluatedFilePath(pathToFileAbsolute, studentName);
-            FeedbackManagement.appendLineToFileForStudent(studentName, evaluatedFilePath + " - WRONG");
         };
         return buttonActionListener;
     }
