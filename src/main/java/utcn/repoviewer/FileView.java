@@ -12,10 +12,13 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,10 +57,12 @@ public class FileView extends JPanel {
 
         JPanel panelFeedBack = new JPanel();
         panelFeedBack.setLayout(new FlowLayout());
-
-        JButton buttonGood = createButton("", Color.decode("#52b788"), new ImageIcon("src\\main\\resources\\like.png"), "goodButton" + studentName, goodButtonActionListener(studentName));
-        JButton buttonMissing = createButton("", Color.decode("#ef233c"), new ImageIcon("src\\main\\resources\\missing.png"), "missingButton" + studentName, missingButtonActionListener(studentName));
         
+        String imageIconGoodPath = Paths.get("src","main","resources","like.png").toString();
+        String imageIconMissingPath = Paths.get("src","main","resources","missing.png").toString();
+        JButton buttonGood = createButton("", Color.decode("#52b788"), new ImageIcon(imageIconGoodPath), "goodButton" + studentName, goodButtonActionListener(studentName));
+        JButton buttonMissing = createButton("", Color.decode("#ef233c"), new ImageIcon(imageIconMissingPath), "missingButton" + studentName, missingButtonActionListener(studentName));
+
         textAreaMessages = new JTextArea(3,200);
         textAreaMessages.setLineWrap(true);
         textAreaMessages.setWrapStyleWord(true);
@@ -90,6 +95,15 @@ public class FileView extends JPanel {
             textAreaCode.setAlignmentX(Component.CENTER_ALIGNMENT);
             if (fileContent.isEmpty()) {
                 textAreaCode.setEnabled(false);
+            }
+            else {
+                    textAreaCode.addMouseListener(new MouseAdapter(){
+                    public void mouseClicked(MouseEvent e){
+                        if(e.getClickCount()==2){
+                                // your code here
+                        }
+                    }
+                });
             }
             customizeCodeFileView();
             //Display the scroll bars only when needed -> It's (more) free real estate

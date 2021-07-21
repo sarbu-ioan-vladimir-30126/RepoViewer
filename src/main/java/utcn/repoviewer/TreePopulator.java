@@ -6,6 +6,8 @@
 package utcn.repoviewer;
 
 import java.io.File;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import javax.swing.tree.DefaultTreeModel;
 
 /**
@@ -16,6 +18,7 @@ public class TreePopulator {
 
     //File fileRoot = new File("C:\\Users\\ocuibus\\Personale\\UTCN\\ISP\\arhiva ISP\\isp-labs-main-03-16-2021-07-14-14\\Adumitrascesei-Gabriela-30126");
     final String[] allowedFileTypes = new String[]{".java", ".xml", ".jpg", ".png"};
+    final String deniedFile = ".DS_Store";//DS_Store files are automatically created by Mac OS X Finder in browsed directories
 
     private DefaultTreeModel treeModel;
 
@@ -51,20 +54,27 @@ public class TreePopulator {
         if (files == null) {
             return null;
         }
-
+    
+        ArrayList<File> allowedFiles = new ArrayList();
+        for(File file : files){
+            if(!deniedFile.equals(file.getName()))
+                allowedFiles.add(file);       
+        }
+        
         String name = "";
-        if (files.length == 1) {
-            File newFile = files[0];
+        if (allowedFiles.size() == 1) {
+            File newFile = allowedFiles.get(0);
             //Directory pass
             if (newFile.isDirectory()) {
-                name += "\\" + newFile.getName() + createChildren(newFile, node);
-                node.setAlternativeName(newFile.getParentFile().getName() + name);
+                name = Paths.get(name,newFile.getName()).toString();
+                name = Paths.get(name,createChildren(newFile,node)).toString();
+                node.setAlternativeName(Paths.get(newFile.getParentFile().getName(),name).toString());
                 return name;
             }
             node.add(new FileNode(newFile));
         }
 
-        for (File file : files) {
+        for (File file : allowedFiles) {
             if (isFileVisible(file)) {
                 FileNode childNode = new FileNode(file);
                 node.add(childNode);
