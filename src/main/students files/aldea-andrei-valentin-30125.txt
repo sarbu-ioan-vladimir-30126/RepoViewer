@@ -1,2 +1,0 @@
-
-isp-lab-1-master/src/main/java/isp/lab1/MathBasicOperations.java - unused variable sdadsa

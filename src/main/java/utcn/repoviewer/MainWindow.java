@@ -441,10 +441,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private String getAbsolutePathToFile(String studentName, String filePath) {
-        String studentFilePath = new File(studentName,filePath).toString();
-        return Paths.get(textFieldRootFolder.getText(),studentFilePath).toString();
-//        String studentFilePath = new File(studentName, filePath).toString();
-//        return Paths.get(textFieldRootFolder.getText(),studentFilePath).toString();
+        return Paths.get(textFieldRootFolder.getText(),Paths.get(studentName,filePath).toString()).toString();
     }
 
     private void loadStudents(File rootFolder) {
