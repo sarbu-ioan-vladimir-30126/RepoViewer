@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class FeedbackManagement {
 
-    static final String studentsFilesDirectoryPath = "src\\main\\students files";
+    static final String studentsFilesDirectoryPath = Paths.get("src","main","students files").toString();
 
     public static String getDataFromFile(String studentName) {
         try {
@@ -47,7 +47,7 @@ public class FeedbackManagement {
     }
 
     public static String getStudentFilePath(String studentName) {
-        return studentsFilesDirectoryPath + "\\" + getFilenameForStudent(studentName);
+            return Paths.get(studentsFilesDirectoryPath,getFilenameForStudent(studentName)).toString();
     }
 
     public static String getFilenameForStudent(String studentName) {

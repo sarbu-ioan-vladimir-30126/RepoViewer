@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,10 +55,12 @@ public class FileView extends JPanel {
 
         JPanel panelFeedBack = new JPanel();
         panelFeedBack.setLayout(new FlowLayout());
-
-        JButton buttonGood = createButton("", Color.decode("#52b788"), new ImageIcon("src\\main\\resources\\like.png"), "goodButton" + studentName, goodButtonActionListener(studentName));
-        JButton buttonMissing = createButton("", Color.decode("#ef233c"), new ImageIcon("src\\main\\resources\\missing.png"), "missingButton" + studentName, missingButtonActionListener(studentName));
         
+        String imageIconGood = Paths.get("src","main","resources","like.png").toString();
+        String imageIconMissing = Paths.get("src","main","resources","missing.png").toString();
+        JButton buttonGood = createButton("", Color.decode("#52b788"), new ImageIcon(imageIconGood), "goodButton" + studentName, goodButtonActionListener(studentName));
+        JButton buttonMissing = createButton("", Color.decode("#ef233c"), new ImageIcon(imageIconMissing), "missingButton" + studentName, missingButtonActionListener(studentName));
+
         textAreaMessages = new JTextArea(3,200);
         textAreaMessages.setLineWrap(true);
         textAreaMessages.setWrapStyleWord(true);

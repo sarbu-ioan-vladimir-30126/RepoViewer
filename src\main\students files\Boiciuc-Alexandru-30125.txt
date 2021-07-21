@@ -1,0 +1,4 @@
+
+isp-lab-3-master\src\main\java\isp\lab3\exercise1\Tree.java - GOOD
+isp-lab-3-master\src\main\java\isp\lab3\exercise1\Tree.java - MISSING
+isp-lab-3-master\src\main\java\isp\lab3\exercise1\Tree.java - GOOD

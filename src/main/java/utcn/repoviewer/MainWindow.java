@@ -8,6 +8,7 @@ package utcn.repoviewer;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -285,7 +286,7 @@ public class MainWindow extends javax.swing.JFrame {
             Object[] incapsulatedPath = treeFolders.getSelectionPath().getPath();
             String relativePathToFile = incapsulatedPath[1].toString();
             for (int i = 2; i < incapsulatedPath.length; i++) {
-                relativePathToFile = String.join("\\", relativePathToFile, incapsulatedPath[i].toString());
+               relativePathToFile = Paths.get(relativePathToFile, incapsulatedPath[i].toString()).toString();
             }
             panelViewCode.setLayout(new GridLayout(1, studentsToView.size()));
             // add all fileviews to the panel, but only if selection is a file!
@@ -436,11 +437,14 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private String getAbsolutePathToStudent(String studentName) {
-        return textFieldRootFolder.getText() + "\\" + studentName;
+        return Paths.get(textFieldRootFolder.getText(), studentName).toString();
     }
 
     private String getAbsolutePathToFile(String studentName, String filePath) {
-        return textFieldRootFolder.getText() + "\\" + studentName + "\\" + filePath;
+        String studentFilePath = new File(studentName,filePath).toString();
+        return Paths.get(textFieldRootFolder.getText(),studentFilePath).toString();
+//        String studentFilePath = new File(studentName, filePath).toString();
+//        return Paths.get(textFieldRootFolder.getText(),studentFilePath).toString();
     }
 
     private void loadStudents(File rootFolder) {
