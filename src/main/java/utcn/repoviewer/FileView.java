@@ -100,7 +100,10 @@ public class FileView extends JPanel {
                     textAreaCode.addMouseListener(new MouseAdapter(){
                     public void mouseClicked(MouseEvent e){
                         if(e.getClickCount()==2){
-                                // your code here
+                                int lineNumber = textAreaCode.getCaretLineNumber() +1;
+                                textAreaMessages.append("\n" + "linia " + lineNumber + ": ");
+                                textAreaMessages.requestFocus();
+                            
                         }
                     }
                 });
