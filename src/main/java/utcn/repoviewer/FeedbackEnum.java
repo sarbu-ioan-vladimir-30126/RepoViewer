@@ -7,11 +7,8 @@ package utcn.repoviewer;
 
 /**
  *
- * @author horiafrincu
+ * @author Ovidiu Ceoca
  */
-public class Main {
-    public static void main(String args[]){
-        MainWindow.openMainWindow();
-    }
-    
+public enum FeedbackEnum {
+    GOOD,AVERAGE,WRONG;
 }
